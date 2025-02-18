@@ -132,12 +132,12 @@ class UNet3Plus(nn.Module):
         self.h4_Cat_hd4_relu = nn.ReLU(inplace=True)
 
         # hd5
-        self.hd5_UT_hd4 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  # 14*14
+        self.hd5_UT_hd4 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  
         self.hd5_UT_hd4_conv = nn.Conv2d(filters[4], self.CatChannels, 3, padding=1)
         self.hd5_UT_hd4_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd5_UT_hd4_relu = nn.ReLU(inplace=True)
 
-        self.conv4d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  # 16
+        self.conv4d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  
         self.bn4d_1 = nn.BatchNorm2d(self.UpChannels)
         self.relu4d_1 = nn.ReLU(inplace=True)
 
@@ -164,18 +164,18 @@ class UNet3Plus(nn.Module):
         self.h3_Cat_hd3_relu = nn.ReLU(inplace=True)
 
         # hd4
-        self.hd4_UT_hd3 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  # 14*14
+        self.hd4_UT_hd3 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  
         self.hd4_UT_hd3_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd4_UT_hd3_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd4_UT_hd3_relu = nn.ReLU(inplace=True)
 
         # hd5
-        self.hd5_UT_hd3 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  # 14*14
+        self.hd5_UT_hd3 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  
         self.hd5_UT_hd3_conv = nn.Conv2d(filters[4], self.CatChannels, 3, padding=1)
         self.hd5_UT_hd3_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd5_UT_hd3_relu = nn.ReLU(inplace=True)
 
-        self.conv3d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  # 16
+        self.conv3d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  
         self.bn3d_1 = nn.BatchNorm2d(self.UpChannels)
         self.relu3d_1 = nn.ReLU(inplace=True)
 
@@ -197,24 +197,24 @@ class UNet3Plus(nn.Module):
         self.h2_Cat_hd2_relu = nn.ReLU(inplace=True)
 
         # hd3
-        self.hd3_UT_hd2 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  # 14*14
+        self.hd3_UT_hd2 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  
         self.hd3_UT_hd2_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd3_UT_hd2_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd3_UT_hd2_relu = nn.ReLU(inplace=True)
 
         # hd4
-        self.hd4_UT_hd2 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  # 14*14
+        self.hd4_UT_hd2 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  
         self.hd4_UT_hd2_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd4_UT_hd2_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd4_UT_hd2_relu = nn.ReLU(inplace=True)
 
         # hd5
-        self.hd5_UT_hd2 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)  # 14*14
+        self.hd5_UT_hd2 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)  
         self.hd5_UT_hd2_conv = nn.Conv2d(filters[4], self.CatChannels, 3, padding=1)
         self.hd5_UT_hd2_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd5_UT_hd2_relu = nn.ReLU(inplace=True)
 
-        self.conv2d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  # 16
+        self.conv2d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1) 
         self.bn2d_1 = nn.BatchNorm2d(self.UpChannels)
         self.relu2d_1 = nn.ReLU(inplace=True)
 
@@ -230,30 +230,30 @@ class UNet3Plus(nn.Module):
             self.h1_Cat_hd1_relu = nn.ReLU(inplace=True)
 
         # hd2
-        self.hd2_UT_hd1 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  # 14*14
+        self.hd2_UT_hd1 = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)  
         self.hd2_UT_hd1_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd2_UT_hd1_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd2_UT_hd1_relu = nn.ReLU(inplace=True)
 
         # hd3
-        self.hd3_UT_hd1 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  # 14*14
+        self.hd3_UT_hd1 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)  
         self.hd3_UT_hd1_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd3_UT_hd1_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd3_UT_hd1_relu = nn.ReLU(inplace=True)
 
         # hd4
-        self.hd4_UT_hd1 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)  # 14*14
+        self.hd4_UT_hd1 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)  
         self.hd4_UT_hd1_conv = nn.Conv2d(self.UpChannels, self.CatChannels, 3, padding=1)
         self.hd4_UT_hd1_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd4_UT_hd1_relu = nn.ReLU(inplace=True)
 
         # hd5
-        self.hd5_UT_hd1 = nn.Upsample(scale_factor=16, mode='bilinear', align_corners=True)  # 14*14
+        self.hd5_UT_hd1 = nn.Upsample(scale_factor=16, mode='bilinear', align_corners=True)  
         self.hd5_UT_hd1_conv = nn.Conv2d(filters[4], self.CatChannels, 3, padding=1)
         self.hd5_UT_hd1_bn = nn.BatchNorm2d(self.CatChannels)
         self.hd5_UT_hd1_relu = nn.ReLU(inplace=True)
 
-        self.conv1d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1)  # 16
+        self.conv1d_1 = nn.Conv2d(self.UpChannels if self.Original_encoder else self.Decoder_cat, self.UpChannels, 3, padding=1) 
         self.bn1d_1 = nn.BatchNorm2d(self.UpChannels)
         self.relu1d_1 = nn.ReLU(inplace=True)
 
