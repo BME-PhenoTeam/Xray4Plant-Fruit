@@ -1,3 +1,94 @@
+# Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional, Tuple, Union, Any, Dict
+
+import numpy as np
+import torch
+import torch.nn as nn
+from torch import Tensor
+import torch.nn.functional as F
+from collections import ChainMap
+
+from mmseg.models.utils.weight_init import weight_init
+from mmseg.models.losses.unet3_plus_ms_ssim_loss import Ms_ssim_loss
+from mmseg.models.losses.unet_plus_iou_loss import IOU_loss
+from mmseg.models.losses.unet3_plus_generalized_dice_loss import Generalized_Dice_Loss
+from mmseg.models.losses.unet3_plus_focal_Loss import Focal_loss
+from mmseg.models.losses import accuracy
+from mmseg.models.losses.boundary_loss import BoundaryLoss
+from mmseg.models.losses.dice_loss import DiceLoss
+
+from mmseg.models.decode_heads.decode_head import BaseDecodeHead
+from mmseg.registry import MODELS
+from mmseg.utils import OptConfigType, SampleList
+
+from mmseg.visualization import SegLocalVisualizer
+
+
+@MODELS.register_module()
+class LOSS(BaseDecodeHead):
+    def __init__(self,
+                 loss_type='generalized_dice_focal_boundary_ms_ssim',
+                 process_input=True,
+                 norm_cfg: OptConfigType = dict(type='BN'),
+                 act_cfg: OptConfigType = dict(type='ReLU', inplace=True),
+                 **kwargs):
+        super().__init__(
+            norm_cfg=norm_cfg,
+            act_cfg=act_cfg,
+            **kwargs)
+
+        """----------------------------------------------loss选择-----------------------------------------------------"""
+        """
+        self.loss_decode[0] ---> FocalLoss
+        self.loss_decode[1] ---> Generalized_Dice_Loss
+        self.loss_decode[2] ---> MS_SSIMLoss
+        self.loss_decode[3] ---> BoundaryLoss
+        self.loss_decode[4] ---> DiceLoss
+        """
+        self.loss_type = loss_type
+        self.process_input = process_input
+
+        if loss_type == 'dice_focal':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.DiceLoss = DiceLoss(loss_weight=1.0)
+
+        elif loss_type == 'focal':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+
+        elif loss_type == 'dice_focal_boundary':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.DiceLoss = DiceLoss(loss_weight=1.0)
+            self.BoundaryLoss = BoundaryLoss(loss_weight=20)
+
+        elif loss_type == 'dice_focal_boundary_ms_ssim':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.DiceLoss = DiceLoss(loss_weight=1.0)
+            self.BoundaryLoss = BoundaryLoss(loss_weight=20)
+            self.ms_ssim_loss = Ms_ssim_loss(process_input=not process_input)
+
+        elif loss_type == 'generalized_dice_focal':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.Generalized_Dice_Loss = Generalized_Dice_Loss(process_input=not process_input)
+
+        elif loss_type == 'generalized_dice_focal_boundary':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.Generalized_Dice_Loss = Generalized_Dice_Loss(process_input=not process_input)
+            self.BoundaryLoss = BoundaryLoss(loss_weight=20)
+
+        elif loss_type == 'generalized_dice_focal_boundary_ms_ssim':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.Generalized_Dice_Loss = Generalized_Dice_Loss(process_input=not process_input)
+            self.BoundaryLoss = BoundaryLoss(loss_weight=20)
+            self.ms_ssim_loss = Ms_ssim_loss(process_input=not process_input)
+        
+        elif loss_type == 'generalized_dice_focal_ms_ssim':
+            self.focal_loss = Focal_loss(ignore_index=255, size_average=True, loss_weight=1.0)
+            self.Generalized_Dice_Loss = Generalized_Dice_Loss(process_input=not process_input)   
+            self.ms_ssim_loss = Ms_ssim_loss(process_input=not process_input)
+            
+        else:
+            raise ValueError(f'Unknown loss type: {loss_type}')
+
     """--------------------------------------------------工具---------------------------------------------------------"""
     def resize(self, x, h, w) -> torch.Tensor:
         _, _, xh, xw = x.shape
@@ -125,4 +216,5 @@
             ms_ssim_loss = self._forward_loss(preds, targets, self.ms_ssim_loss, False, loss_name='msssim')
             dice_focal_loss = dict(ChainMap(focal_loss, generalized_dice_loss, ms_ssim_loss))         # 合并字典
 
-            return dice_focal_loss  
+            return dice_focal_loss        
+
