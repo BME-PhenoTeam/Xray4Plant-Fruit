@@ -8,20 +8,19 @@ from torch import Tensor
 import torch.nn.functional as F
 from collections import ChainMap
 
-from mmseg.models.utils.weight_init import weight_init
-from mmseg.models.losses.unet3_plus_ms_ssim_loss import Ms_ssim_loss
-from mmseg.models.losses.unet_plus_iou_loss import IOU_loss
-from mmseg.models.losses.unet3_plus_generalized_dice_loss import Generalized_Dice_Loss
-from mmseg.models.losses.unet3_plus_focal_Loss import Focal_loss
+
 from mmseg.models.losses import accuracy
 from mmseg.models.losses.boundary_loss import BoundaryLoss
+from mmseg.models.losses.unet3_plus_focal_Loss import Focal_loss
+from mmseg.models.losses.unet3_plus_ms_ssim_loss import Ms_ssim_loss
+from mmseg.models.losses.unet3_plus_generalized_dice_loss import Generalized_Dice_Loss
 from mmseg.models.losses.dice_loss import DiceLoss
 
+from mmseg.models.utils.weight_init import weight_init
 from mmseg.models.decode_heads.decode_head import BaseDecodeHead
+
 from mmseg.registry import MODELS
 from mmseg.utils import OptConfigType, SampleList
-
-from mmseg.visualization import SegLocalVisualizer
 
 
 @MODELS.register_module()
