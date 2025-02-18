@@ -20,12 +20,6 @@ model = dict(
         is_batchnorm=True,
         Attention_choose=False,        
         Original_encoder=False        
-        # type='UNet3Plus',
-        # skip_ch=64,
-        # encoder='RepLKNet',
-        # channels=[3, 128, 256, 512, 1024],
-        # dropout=0.3,
-        # fast_up=True
     ),
     decode_head=dict(
         type='Unet3_plus_Head',
@@ -39,7 +33,7 @@ model = dict(
         aux_weight=0.4,
         process_input=True,
         num_classes=5,
-        backbone_channels=[3, 64, 128, 256, 512, 1024],
+        backbone_channels=[3, 64, 128, 256, 512],
         norm_cfg=norm_cfg,
         align_corners=False
     ),
