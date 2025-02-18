@@ -184,7 +184,6 @@ class UNet3Plus(nn.Module):
             self.SimAM_3d = SimAM()
 
         '''stage 2d '''
-        # h1->320*320, hd2->160*160, Pooling 2 times
         if self.Original_encoder:
             self.h1_PT_hd2 = nn.MaxPool2d(2, 2, ceil_mode=True)
             self.h1_PT_hd2_conv = nn.Conv2d(filters[0], self.CatChannels, 3, padding=1)
@@ -223,7 +222,6 @@ class UNet3Plus(nn.Module):
             self.SimAM_2d = SimAM()
 
         '''stage 1d'''
-        # h1->320*320, hd1->320*320, Concatenation
         if self.Original_encoder:
             self.h1_Cat_hd1_conv = nn.Conv2d(filters[0], self.CatChannels, 3, padding=1)
             self.h1_Cat_hd1_bn = nn.BatchNorm2d(self.CatChannels)
@@ -271,19 +269,19 @@ class UNet3Plus(nn.Module):
     def forward(self, inputs):
         # -------------Encoder-------------
         if self.Original_encoder:
-            h1 = self.conv1(inputs)  # h1->320*320*64
+            h1 = self.conv1(inputs)  
 
             h2 = self.maxpool1(h1)
-            h2 = self.conv2(h2)  # h2->160*160*128
+            h2 = self.conv2(h2)  
 
             h3 = self.maxpool2(h2)
-            h3 = self.conv3(h3)  # h3->80*80*256
+            h3 = self.conv3(h3)  
 
             h4 = self.maxpool3(h3)
-            h4 = self.conv4(h4)  # h4->40*40*512
+            h4 = self.conv4(h4)  
 
             h5 = self.maxpool4(h4)
-            hd5 = self.conv5(h5)  # h5->20*20*1024
+            hd5 = self.conv5(h5)  
         else:
             enc_outs = []
             level_outputs = self.encoder(inputs)        # 替换为ReplkNet作为编码器特征提取
